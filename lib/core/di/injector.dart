@@ -3,8 +3,11 @@ import 'package:get_it/get_it.dart';
 import '../../data/datasources/movie_remote_data_source.dart';
 import '../../data/repositories/movie_repository_impl.dart';
 import '../../domain/repositories/movie_repository.dart';
+import '../../domain/entities/movie.dart';
 import '../../domain/usecases/get_discover_movies_use_case.dart';
+import '../../domain/usecases/get_movie_details_use_case.dart';
 import '../../modules/catalog/cubit/catalog_cubit.dart';
+import '../../modules/movie_detail/cubit/movie_detail_cubit.dart';
 import '../../network/api_client.dart';
 import '../env.dart';
 import '../flavor/flavor_config.dart';
@@ -30,7 +33,12 @@ void setupInjector(FlavorConfig config) {
 
   // Domain
   getIt.registerFactory(() => GetDiscoverMoviesUseCase(getIt()));
+  getIt.registerFactory(() => GetMovieDetailsUseCase(getIt()));
 
   // Cubits (factory: cada ecrã recebe uma instância nova)
   getIt.registerFactory(() => CatalogCubit(getIt()));
+  // Recebe o filme selecionado como parâmetro em runtime.
+  getIt.registerFactoryParam<MovieDetailCubit, Movie, void>(
+    (movie, _) => MovieDetailCubit(getIt(), movie: movie),
+  );
 }

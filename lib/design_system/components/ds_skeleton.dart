@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../tokens/ds_colors.dart';
 import '../tokens/ds_radius.dart';
-import 'ds_section.dart';
+import 'ds_horizontal_list.dart';
 
 /// Placeholder pulsante de uma linha de posters.
 class DSSkeletonRow extends StatefulWidget {

@@ -62,11 +62,14 @@ Fluxo: `Page → Cubit → UseCase → Repository → DataSource → ApiClient`.
 - **Camada de network isolada** — só o `ApiClient` conhece o Dio; a api_key entra por interceptor.
 - **Design System interno** — componentes `DS*` sem conhecimento de domínio (recebem URL, nota, `highlighted`). Pode ser extraído para um package sem alterações.
 - **Injeção de dependências** com `get_it`; cubits registados como `factory`.
-- **Detalhe sem cubit** — o ecrã só apresenta um filme já validado; um cubit seria cerimónia sem ganho.
+- **Detalhe com carregamento progressivo** — o poster e a nota (requisito) aparecem de imediato com os dados do catálogo; o `MovieDetailCubit` busca `/movie/{id}?append_to_response=credits` num único pedido e acrescenta sinopse, géneros, duração e elenco. Se falhar, o requisito continua cumprido e há *retry*.
 
 - **Flavors em Dart** — `dev`, `qa` e `prod` são entrypoints que passam um `FlavorConfig` ao `bootstrap`. Cada ambiente tem o seu `env/<flavor>.json`. Funciona igual em Android, iOS e web sem configuração nativa; *productFlavors*/schemes nativos (ícone e bundle id por ambiente) seriam o passo seguinte.
 
 ## Testes
 
 - `CatalogCubit`: secções independentes, regra de destaque (incluindo o limite 6.0), abrir detalhe vs. aviso.
-- `MovieModel`: parsing e construção da URL do poster.
+- `MovieDetailCubit`: carregamento, erro, retry e formatação de duração/ano.
+- `MovieModel` / `MovieDetailsModel`: parsing, URLs de imagem e normalização de campos vazios.
+- `MovieRepositoryImpl`: conversão para entidades e de exceções em `Failure`.
+- `NetworkException` / `ApiClient`: mapeamento de erros, `api_key` anexada por interceptor (adapter falso, sem rede) e falha antecipada sem key.
