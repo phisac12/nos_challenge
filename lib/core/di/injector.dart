@@ -35,9 +35,8 @@ void setupInjector(FlavorConfig config, SharedPreferences prefs) {
 }
 
 void _registerCore(FlavorConfig config, SharedPreferences prefs) {
-  getIt
-    ..registerSingleton<FlavorConfig>(config)
-    ..registerSingleton<SharedPreferences>(prefs);
+  getIt.registerSingleton<FlavorConfig>(config);
+  getIt.registerSingleton<SharedPreferences>(prefs);
 }
 
 void _registerNetwork(FlavorConfig config) {
@@ -48,44 +47,42 @@ void _registerNetwork(FlavorConfig config) {
 }
 
 void _registerDataSources() {
-  getIt
-    ..registerLazySingleton<AppInfoDataSource>(
-      () => const AppInfoDataSourceImpl(),
-    )
-    ..registerLazySingleton<MovieRemoteDataSource>(
-      () => MovieRemoteDataSourceImpl(getIt()),
-    )
-    ..registerLazySingleton<SettingsLocalDataSource>(
-      () => SettingsLocalDataSourceImpl(getIt()),
-    );
+  getIt.registerLazySingleton<AppInfoDataSource>(
+    () => const AppInfoDataSourceImpl(),
+  );
+  getIt.registerLazySingleton<MovieRemoteDataSource>(
+    () => MovieRemoteDataSourceImpl(getIt()),
+  );
+  getIt.registerLazySingleton<SettingsLocalDataSource>(
+    () => SettingsLocalDataSourceImpl(getIt()),
+  );
 }
 
 void _registerRepositories() {
-  getIt
-    ..registerLazySingleton<MovieRepository>(() => MovieRepositoryImpl(getIt()))
-    ..registerLazySingleton<SettingsRepository>(
-      () => SettingsRepositoryImpl(getIt(), getIt()),
-    );
+  getIt.registerLazySingleton<MovieRepository>(
+    () => MovieRepositoryImpl(getIt()),
+  );
+  getIt.registerLazySingleton<SettingsRepository>(
+    () => SettingsRepositoryImpl(getIt(), getIt()),
+  );
 }
 
 void _registerUseCases() {
-  getIt
-    ..registerFactory(() => GetAppInfoUseCase(getIt()))
-    ..registerFactory(() => GetDiscoverMoviesUseCase(getIt()))
-    ..registerFactory(() => GetMovieDetailsUseCase(getIt()))
-    ..registerFactory(() => GetThemeModeUseCase(getIt()))
-    ..registerFactory(() => SaveThemeModeUseCase(getIt()));
+  getIt.registerFactory(() => GetAppInfoUseCase(getIt()));
+  getIt.registerFactory(() => GetDiscoverMoviesUseCase(getIt()));
+  getIt.registerFactory(() => GetMovieDetailsUseCase(getIt()));
+  getIt.registerFactory(() => GetThemeModeUseCase(getIt()));
+  getIt.registerFactory(() => SaveThemeModeUseCase(getIt()));
 }
 
 /// Factory: cada ecrã recebe uma instância nova.
 void _registerCubits(FlavorConfig config) {
-  getIt
-    ..registerFactory(() => CatalogCubit(getIt()))
-    // Recebe o filme selecionado como parâmetro em runtime.
-    ..registerFactoryParam<MovieDetailCubit, Movie, void>(
-      (movie, _) => MovieDetailCubit(getIt(), movie: movie),
-    )
-    ..registerFactory(
-      () => SettingsCubit(getIt(), getIt(), getIt(), appName: config.appName),
-    );
+  getIt.registerFactory(() => CatalogCubit(getIt()));
+  // Recebe o filme selecionado como parâmetro em runtime.
+  getIt.registerFactoryParam<MovieDetailCubit, Movie, void>(
+    (movie, _) => MovieDetailCubit(getIt(), movie: movie),
+  );
+  getIt.registerFactory(
+    () => SettingsCubit(getIt(), getIt(), getIt(), appName: config.appName),
+  );
 }
