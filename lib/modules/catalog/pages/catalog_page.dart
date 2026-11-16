@@ -29,6 +29,7 @@ class _CatalogView extends StatelessWidget {
         final cubit = context.read<CatalogCubit>();
         switch (state.effect) {
           case OpenMovieDetail(:final movie):
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
             Navigator.of(context).push(MovieDetailPage.route(movie));
           case ShowLowRatingWarning():
             DSSnackbar.showWarning(context, 'Classificação baixa — detalhe indisponível.');
