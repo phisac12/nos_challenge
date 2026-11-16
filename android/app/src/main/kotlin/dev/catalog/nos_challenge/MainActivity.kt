@@ -1,4 +1,4 @@
-package dev.catalog.movie_catalog
+package dev.catalog.nos_challenge
 
 import io.flutter.embedding.android.FlutterActivity
 

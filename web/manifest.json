@@ -1,6 +1,6 @@
 {
-    "name": "movie_catalog",
-    "short_name": "movie_catalog",
+    "name": "nos_challenge",
+    "short_name": "nos_challenge",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

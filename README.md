@@ -1,4 +1,4 @@
-# Movie Catalog
+# nos_challenge
 
 Catálogo de filmes em Flutter: scroll vertical entre secções (páginas 1, 2 e 3 do endpoint `discover/movie`) e horizontal pelos filmes de cada secção.
 

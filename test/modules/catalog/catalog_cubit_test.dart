@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:movie_catalog/core/result.dart';
-import 'package:movie_catalog/domain/entities/movie.dart';
-import 'package:movie_catalog/domain/usecases/get_discover_movies_use_case.dart';
-import 'package:movie_catalog/modules/catalog/cubit/catalog_cubit.dart';
+import 'package:nos_challenge/core/result.dart';
+import 'package:nos_challenge/domain/entities/movie.dart';
+import 'package:nos_challenge/domain/usecases/get_discover_movies_use_case.dart';
+import 'package:nos_challenge/modules/catalog/cubit/catalog_cubit.dart';
 
 class _MockUseCase extends Mock implements GetDiscoverMoviesUseCase {}
 

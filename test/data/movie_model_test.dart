@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:movie_catalog/data/models/movie_model.dart';
+import 'package:nos_challenge/data/models/movie_model.dart';
 
 void main() {
   test('mapeia JSON da API para entidade com URL de poster completa', () {
