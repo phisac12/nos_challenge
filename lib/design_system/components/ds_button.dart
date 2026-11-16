@@ -32,6 +32,11 @@ class DSButton extends StatelessWidget {
     );
     return icon == null
         ? TextButton(onPressed: onPressed, style: style, child: Text(label))
-        : TextButton.icon(onPressed: onPressed, style: style, icon: Icon(icon, size: 18), label: Text(label));
+        : TextButton.icon(
+            onPressed: onPressed,
+            style: style,
+            icon: Icon(icon, size: 18),
+            label: Text(label),
+          );
   }
 }

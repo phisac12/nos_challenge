@@ -14,9 +14,12 @@ class DSSkeletonRow extends StatefulWidget {
   State<DSSkeletonRow> createState() => _DSSkeletonRowState();
 }
 
-class _DSSkeletonRowState extends State<DSSkeletonRow> with SingleTickerProviderStateMixin {
-  late final _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 900))
-    ..repeat(reverse: true);
+class _DSSkeletonRowState extends State<DSSkeletonRow>
+    with SingleTickerProviderStateMixin {
+  late final _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 900),
+  )..repeat(reverse: true);
 
   @override
   void dispose() {
@@ -32,7 +35,10 @@ class _DSSkeletonRowState extends State<DSSkeletonRow> with SingleTickerProvider
         itemCount: 5,
         itemBuilder: (_, _) => Container(
           width: widget.itemWidth,
-          decoration: const BoxDecoration(color: DSColors.surface, borderRadius: DSRadius.md),
+          decoration: const BoxDecoration(
+            color: DSColors.surface,
+            borderRadius: DSRadius.md,
+          ),
         ),
       ),
     );

@@ -24,7 +24,8 @@ class _CatalogView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<CatalogCubit, CatalogState>(
-      listenWhen: (prev, curr) => curr.effect != null && prev.effect != curr.effect,
+      listenWhen: (prev, curr) =>
+          curr.effect != null && prev.effect != curr.effect,
       listener: (context, state) {
         final cubit = context.read<CatalogCubit>();
         switch (state.effect) {
@@ -32,7 +33,10 @@ class _CatalogView extends StatelessWidget {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             Navigator.of(context).push(MovieDetailPage.route(movie));
           case ShowLowRatingWarning():
-            DSSnackbar.showWarning(context, 'Classificação baixa — detalhe indisponível.');
+            DSSnackbar.showWarning(
+              context,
+              'Classificação baixa — detalhe indisponível.',
+            );
           case null:
             break;
         }
@@ -49,7 +53,12 @@ class _CatalogView extends StatelessWidget {
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return const Padding(
-                    padding: EdgeInsets.fromLTRB(DSSpacing.md, DSSpacing.lg, DSSpacing.md, 0),
+                    padding: EdgeInsets.fromLTRB(
+                      DSSpacing.md,
+                      DSSpacing.lg,
+                      DSSpacing.md,
+                      0,
+                    ),
                     child: Text('Descobrir', style: DSTypography.display),
                   );
                 }
@@ -78,20 +87,23 @@ class _SectionContent extends StatelessWidget {
     final cubit = context.read<CatalogCubit>();
     return switch (section) {
       SectionLoading() => const DSSkeletonRow(),
-      SectionError(:final message) => DSErrorView(message: message, onRetry: () => cubit.loadSection(page)),
+      SectionError(:final message) => DSErrorView(
+        message: message,
+        onRetry: () => cubit.loadSection(page),
+      ),
       SectionLoaded(:final items) => DSHorizontalList(
-          itemCount: items.length,
-          itemBuilder: (_, i) {
-            final item = items[i];
-            return DSMovieCard(
-              posterUrl: item.movie.posterUrl,
-              rating: item.movie.voteAverage,
-              highlighted: item.isHighlighted,
-              heroTag: MovieDetailPage.heroTag(item.movie),
-              onTap: () => cubit.onMovieSelected(item.movie),
-            );
-          },
-        ),
+        itemCount: items.length,
+        itemBuilder: (_, i) {
+          final item = items[i];
+          return DSMovieCard(
+            posterUrl: item.movie.posterUrl,
+            rating: item.movie.voteAverage,
+            highlighted: item.isHighlighted,
+            heroTag: MovieDetailPage.heroTag(item.movie),
+            onTap: () => cubit.onMovieSelected(item.movie),
+          );
+        },
+      ),
     };
   }
 }

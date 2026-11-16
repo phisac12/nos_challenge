@@ -58,8 +58,9 @@ final class ShowLowRatingWarning extends CatalogEffect {
 class CatalogState extends Equatable {
   const CatalogState({required this.sections, this.effect});
 
-  factory CatalogState.initial(List<int> pages) =>
-      CatalogState(sections: {for (final p in pages) p: const SectionLoading()});
+  factory CatalogState.initial(List<int> pages) => CatalogState(
+    sections: {for (final p in pages) p: const SectionLoading()},
+  );
 
   /// page -> estado da secção. Ordem de inserção preservada (LinkedHashMap).
   final Map<int, SectionState> sections;

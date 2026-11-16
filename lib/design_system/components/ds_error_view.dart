@@ -21,10 +21,19 @@ class DSErrorView extends StatelessWidget {
           children: [
             const Icon(Icons.cloud_off_rounded, color: DSColors.textSecondary),
             const SizedBox(height: DSSpacing.sm),
-            Text(message, style: DSTypography.caption, textAlign: TextAlign.center),
+            Text(
+              message,
+              style: DSTypography.caption,
+              textAlign: TextAlign.center,
+            ),
             if (onRetry != null) ...[
               const SizedBox(height: DSSpacing.sm),
-              DSButton(label: 'Tentar novamente', icon: Icons.refresh, variant: DSButtonVariant.ghost, onPressed: onRetry),
+              DSButton(
+                label: 'Tentar novamente',
+                icon: Icons.refresh,
+                variant: DSButtonVariant.ghost,
+                onPressed: onRetry,
+              ),
             ],
           ],
         ),

@@ -4,5 +4,7 @@ abstract final class ApiConfig {
   static const timeout = Duration(seconds: 15);
 
   static String? posterUrl(String? posterPath) =>
-      (posterPath == null || posterPath.isEmpty) ? null : '$imageBaseUrl$posterPath';
+      (posterPath == null || posterPath.isEmpty)
+      ? null
+      : '$imageBaseUrl$posterPath';
 }

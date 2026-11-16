@@ -15,7 +15,11 @@ void main() {
   });
 
   test('poster ausente resulta em posterUrl nulo', () {
-    final movie = MovieModel.fromJson({'id': 1, 'poster_path': null, 'vote_average': null}).toEntity();
+    final movie = MovieModel.fromJson({
+      'id': 1,
+      'poster_path': null,
+      'vote_average': null,
+    }).toEntity();
     expect(movie.posterUrl, isNull);
     expect(movie.voteAverage, 0);
   });

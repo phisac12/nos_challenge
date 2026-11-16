@@ -16,16 +16,16 @@ class MovieModel {
   final double voteAverage;
 
   factory MovieModel.fromJson(Map<String, dynamic> json) => MovieModel(
-        id: json['id'] as int,
-        title: (json['title'] as String?) ?? '',
-        posterPath: json['poster_path'] as String?,
-        voteAverage: (json['vote_average'] as num?)?.toDouble() ?? 0,
-      );
+    id: json['id'] as int,
+    title: (json['title'] as String?) ?? '',
+    posterPath: json['poster_path'] as String?,
+    voteAverage: (json['vote_average'] as num?)?.toDouble() ?? 0,
+  );
 
   Movie toEntity() => Movie(
-        id: id,
-        title: title,
-        posterUrl: ApiConfig.posterUrl(posterPath),
-        voteAverage: voteAverage,
-      );
+    id: id,
+    title: title,
+    posterUrl: ApiConfig.posterUrl(posterPath),
+    voteAverage: voteAverage,
+  );
 }

@@ -13,7 +13,10 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
 
   @override
   Future<List<MovieModel>> discoverMovies({required int page}) async {
-    final json = await _client.get(Endpoints.discoverMovies, query: {'page': page});
+    final json = await _client.get(
+      Endpoints.discoverMovies,
+      query: {'page': page},
+    );
     final results = (json['results'] as List?) ?? const [];
     return results
         .cast<Map<String, dynamic>>()

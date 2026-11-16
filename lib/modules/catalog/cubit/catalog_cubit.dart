@@ -12,15 +12,14 @@ part 'catalog_state.dart';
 /// - carregamento independente de cada secção;
 /// - limiar de classificação (destaque e acesso ao detalhe).
 class CatalogCubit extends Cubit<CatalogState> {
-  CatalogCubit({
-    required this.getDiscoverMovies,
-    this.pages = defaultPages,
-  }) : super(CatalogState.initial(pages));
+  CatalogCubit(this._getDiscoverMovies, {this.pages = defaultPages})
+    : super(CatalogState.initial(pages));
 
   static const defaultPages = [1, 2, 3];
   static const minRating = 6.0;
 
-  final GetDiscoverMoviesUseCase getDiscoverMovies;
+  /// Injetado pelo construtor e privado: só o cubit o usa.
+  final GetDiscoverMoviesUseCase _getDiscoverMovies;
   final List<int> pages;
 
   static bool isWellRated(Movie movie) => movie.voteAverage >= minRating;
@@ -35,20 +34,25 @@ class CatalogCubit extends Cubit<CatalogState> {
 
   Future<void> loadSection(int page) async {
     _emitSection(page, const SectionLoading());
-    final result = await getDiscoverMovies(page: page);
-    _emitSection(
-      page,
-      switch (result) {
-        Success(:final data) => SectionLoaded(
-            data.map((m) => MovieItem(movie: m, isHighlighted: isWellRated(m))).toList(growable: false),
-          ),
-        Failure(:final message) => SectionError(message),
-      },
-    );
+    final result = await _getDiscoverMovies(page: page);
+    _emitSection(page, switch (result) {
+      Success(:final data) => SectionLoaded(
+        data
+            .map((m) => MovieItem(movie: m, isHighlighted: isWellRated(m)))
+            .toList(growable: false),
+      ),
+      Failure(:final message) => SectionError(message),
+    });
   }
 
   void onMovieSelected(Movie movie) {
-    emit(state.withEffect(isWellRated(movie) ? OpenMovieDetail(movie) : ShowLowRatingWarning(movie)));
+    emit(
+      state.withEffect(
+        isWellRated(movie)
+            ? OpenMovieDetail(movie)
+            : ShowLowRatingWarning(movie),
+      ),
+    );
   }
 
   void effectHandled() => emit(state.withEffect(null));

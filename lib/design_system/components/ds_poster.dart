@@ -6,7 +6,12 @@ import '../tokens/ds_radius.dart';
 
 /// Poster com cache, placeholder e fallback. Não conhece a API: recebe só a URL.
 class DSPoster extends StatelessWidget {
-  const DSPoster({super.key, required this.imageUrl, this.width, this.borderRadius = DSRadius.md});
+  const DSPoster({
+    super.key,
+    required this.imageUrl,
+    this.width,
+    this.borderRadius = DSRadius.md,
+  });
 
   final String? imageUrl;
   final double? width;

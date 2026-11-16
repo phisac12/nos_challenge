@@ -1,0 +1,8 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    { "name": "DEV", "request": "launch", "type": "dart", "program": "lib/main_dev.dart", "args": ["--dart-define-from-file=env/dev.json"] },
+    { "name": "QA", "request": "launch", "type": "dart", "program": "lib/main_qa.dart", "args": ["--dart-define-from-file=env/qa.json"] },
+    { "name": "PROD", "request": "launch", "type": "dart", "program": "lib/main_prod.dart", "args": ["--dart-define-from-file=env/prod.json"], "flutterMode": "release" }
+  ]
+}

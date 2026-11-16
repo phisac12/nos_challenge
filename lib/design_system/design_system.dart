@@ -3,6 +3,7 @@ library;
 
 export 'components/ds_button.dart';
 export 'components/ds_error_view.dart';
+export 'components/ds_flavor_banner.dart';
 export 'components/ds_movie_card.dart';
 export 'components/ds_poster.dart';
 export 'components/ds_rating_badge.dart';

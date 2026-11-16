@@ -5,7 +5,12 @@ import '../tokens/ds_radius.dart';
 import '../tokens/ds_typography.dart';
 
 class DSRatingBadge extends StatelessWidget {
-  const DSRatingBadge({super.key, required this.rating, required this.highlighted, this.large = false});
+  const DSRatingBadge({
+    super.key,
+    required this.rating,
+    required this.highlighted,
+    this.large = false,
+  });
 
   final double rating;
   final bool highlighted;
@@ -24,7 +29,10 @@ class DSRatingBadge extends StatelessWidget {
         children: [
           Icon(Icons.star_rounded, size: 14 * scale, color: fg),
           SizedBox(width: 2 * scale),
-          Text(rating.toStringAsFixed(1), style: DSTypography.badge.copyWith(color: fg, fontSize: 12 * scale)),
+          Text(
+            rating.toStringAsFixed(1),
+            style: DSTypography.badge.copyWith(color: fg, fontSize: 12 * scale),
+          ),
         ],
       ),
     );

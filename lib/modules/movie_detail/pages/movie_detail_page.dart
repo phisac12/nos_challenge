@@ -26,11 +26,22 @@ class MovieDetailPage extends StatelessWidget {
             constraints: const BoxConstraints(maxWidth: 360),
             child: Column(
               children: [
-                Hero(tag: heroTag(movie), child: DSPoster(imageUrl: movie.posterUrl)),
+                Hero(
+                  tag: heroTag(movie),
+                  child: DSPoster(imageUrl: movie.posterUrl),
+                ),
                 const SizedBox(height: DSSpacing.lg),
-                Text(movie.title, style: DSTypography.display, textAlign: TextAlign.center),
+                Text(
+                  movie.title,
+                  style: DSTypography.display,
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: DSSpacing.md),
-                DSRatingBadge(rating: movie.voteAverage, highlighted: true, large: true),
+                DSRatingBadge(
+                  rating: movie.voteAverage,
+                  highlighted: true,
+                  large: true,
+                ),
               ],
             ),
           ),

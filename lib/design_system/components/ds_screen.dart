@@ -5,7 +5,12 @@ import '../tokens/ds_typography.dart';
 
 /// Esqueleto padrão de qualquer ecrã da app.
 class DSScreen extends StatelessWidget {
-  const DSScreen({super.key, required this.body, this.title, this.showBack = false});
+  const DSScreen({
+    super.key,
+    required this.body,
+    this.title,
+    this.showBack = false,
+  });
 
   final String? title;
   final Widget body;
@@ -21,7 +26,9 @@ class DSScreen extends StatelessWidget {
               backgroundColor: DSColors.background,
               surfaceTintColor: Colors.transparent,
               automaticallyImplyLeading: showBack,
-              title: title == null ? null : Text(title!, style: DSTypography.title),
+              title: title == null
+                  ? null
+                  : Text(title!, style: DSTypography.title),
             ),
       body: SafeArea(child: body),
     );

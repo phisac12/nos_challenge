@@ -4,12 +4,29 @@ Catálogo de filmes em Flutter: scroll vertical entre secções (páginas 1, 2 e
 
 ## Como executar
 
-Requer Flutter 3.35+ e uma API key do TMDB (não versionada).
+Requer Flutter 3.35+ e uma API Key (v3) do TMDB, que não é versionada.
+
+1. Cria os ficheiros de ambiente a partir do exemplo e coloca a tua key:
 
 ```bash
-flutter pub get
-flutter run --dart-define=TMDB_API_KEY=<a_tua_key>
+for f in dev qa prod; do cp env/example.json env/$f.json; done
 ```
+
+2. Executa o flavor pretendido:
+
+```bash
+flutter run -t lib/main_dev.dart  --dart-define-from-file=env/dev.json
+flutter run -t lib/main_qa.dart   --dart-define-from-file=env/qa.json
+flutter run -t lib/main_prod.dart --dart-define-from-file=env/prod.json --release
+```
+
+No VS Code, as configurações **DEV**, **QA** e **PROD** já estão em `.vscode/launch.json`.
+
+| Flavor | Nome da app | Faixa no ecrã | Logs de rede |
+|---|---|---|---|
+| dev | Nos Challenge DEV | DEV | sim |
+| qa | Nos Challenge QA | QA | sim |
+| prod | Nos Challenge | — | não |
 
 Testes:
 
@@ -21,7 +38,8 @@ flutter test
 
 ```
 lib/
-├── core/            # DI (get_it), Env (--dart-define), Result<T>
+├── core/            # DI (get_it), FlavorConfig, Env (--dart-define), Result<T>
+├── main_{dev,qa,prod}.dart  # entrypoints → bootstrap(FlavorConfig)
 ├── network/         # ApiClient (Dio), interceptor da api_key, endpoints, NetworkException
 ├── domain/          # Entidades, contratos de repositório, use cases (1 por serviço)
 ├── data/            # DTOs (fromJson → entidade), datasources remotos, repositórios
@@ -45,6 +63,8 @@ Fluxo: `Page → Cubit → UseCase → Repository → DataSource → ApiClient`.
 - **Design System interno** — componentes `DS*` sem conhecimento de domínio (recebem URL, nota, `highlighted`). Pode ser extraído para um package sem alterações.
 - **Injeção de dependências** com `get_it`; cubits registados como `factory`.
 - **Detalhe sem cubit** — o ecrã só apresenta um filme já validado; um cubit seria cerimónia sem ganho.
+
+- **Flavors em Dart** — `dev`, `qa` e `prod` são entrypoints que passam um `FlavorConfig` ao `bootstrap`. Cada ambiente tem o seu `env/<flavor>.json`. Funciona igual em Android, iOS e web sem configuração nativa; *productFlavors*/schemes nativos (ícone e bundle id por ambiente) seriam o passo seguinte.
 
 ## Testes
 

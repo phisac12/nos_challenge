@@ -11,14 +11,20 @@ class NetworkException implements Exception {
     return switch (e.type) {
       DioExceptionType.connectionTimeout ||
       DioExceptionType.receiveTimeout ||
-      DioExceptionType.sendTimeout =>
-        const NetworkException('O servidor demorou demasiado a responder.'),
-      DioExceptionType.connectionError =>
-        const NetworkException('Sem ligação à internet.'),
-      DioExceptionType.badResponse when status == 401 =>
-        const NetworkException('API key inválida.', statusCode: 401),
-      DioExceptionType.badResponse =>
-        NetworkException('Erro do servidor ($status).', statusCode: status),
+      DioExceptionType.sendTimeout => const NetworkException(
+        'O servidor demorou demasiado a responder.',
+      ),
+      DioExceptionType.connectionError => const NetworkException(
+        'Sem ligação à internet.',
+      ),
+      DioExceptionType.badResponse when status == 401 => const NetworkException(
+        'API key inválida.',
+        statusCode: 401,
+      ),
+      DioExceptionType.badResponse => NetworkException(
+        'Erro do servidor ($status).',
+        statusCode: status,
+      ),
       _ => const NetworkException('Erro inesperado de rede.'),
     };
   }

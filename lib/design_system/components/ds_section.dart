@@ -5,7 +5,12 @@ import '../tokens/ds_typography.dart';
 
 /// Secção com título e lista horizontal. Recebe o conteúdo já pronto (lista, loading ou erro).
 class DSSection extends StatelessWidget {
-  const DSSection({super.key, required this.title, required this.child, this.height = 205});
+  const DSSection({
+    super.key,
+    required this.title,
+    required this.child,
+    this.height = 205,
+  });
 
   final String title;
   final Widget child;
@@ -17,7 +22,12 @@ class DSSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(DSSpacing.md, DSSpacing.lg, DSSpacing.md, DSSpacing.sm),
+          padding: const EdgeInsets.fromLTRB(
+            DSSpacing.md,
+            DSSpacing.lg,
+            DSSpacing.md,
+            DSSpacing.sm,
+          ),
           child: Text(title, style: DSTypography.title),
         ),
         SizedBox(height: height, child: child),
@@ -28,7 +38,11 @@ class DSSection extends StatelessWidget {
 
 /// Lista horizontal padrão para usar dentro de [DSSection].
 class DSHorizontalList extends StatelessWidget {
-  const DSHorizontalList({super.key, required this.itemCount, required this.itemBuilder});
+  const DSHorizontalList({
+    super.key,
+    required this.itemCount,
+    required this.itemBuilder,
+  });
 
   final int itemCount;
   final IndexedWidgetBuilder itemBuilder;

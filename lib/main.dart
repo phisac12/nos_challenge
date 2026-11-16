@@ -1,10 +1,4 @@
-import 'package:flutter/material.dart';
+import 'bootstrap.dart';
+import 'core/flavor/flavor_config.dart';
 
-import 'app.dart';
-import 'core/di/injector.dart';
-
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  setupInjector();
-  runApp(const NosChallengeApp());
-}
+void main() => bootstrap(FlavorConfig.dev);

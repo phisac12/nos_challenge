@@ -19,14 +19,16 @@ void main() {
 
   setUp(() => useCase = _MockUseCase());
 
-  CatalogCubit build() => CatalogCubit(getDiscoverMovies: useCase);
+  CatalogCubit build() => CatalogCubit(useCase);
 
   test('estado inicial: todas as secções em loading', () {
     expect(build().state.sections.values, everyElement(isA<SectionLoading>()));
   });
 
   test('cada secção aparece assim que a sua página responde, sem esperar pelas outras', () async {
-    final completers = {for (final p in [1, 2, 3]) p: Completer<Result<List<Movie>>>()};
+    final completers = {
+      for (final p in [1, 2, 3]) p: Completer<Result<List<Movie>>>(),
+    };
     when(() => useCase(page: any(named: 'page')))
         .thenAnswer((inv) => completers[inv.namedArguments[#page]]!.future);
 
@@ -46,7 +48,9 @@ void main() {
 
   blocTest<CatalogCubit, CatalogState>(
     'marca como destaque filmes com classificação >= 6.0',
-    setUp: () => when(() => useCase(page: 1)).thenAnswer((_) async => const Success([good, edge, bad])),
+    setUp: () =>
+        when(() => useCase(page: 1))
+            .thenAnswer((_) async => const Success([good, edge, bad])),
     build: build,
     act: (c) => c.loadSection(1),
     verify: (c) {
@@ -59,13 +63,25 @@ void main() {
     'filme >= 6.0 abre o detalhe',
     build: build,
     act: (c) => c.onMovieSelected(edge),
-    expect: () => [isA<CatalogState>().having((s) => s.effect, 'effect', const OpenMovieDetail(edge))],
+    expect: () => [
+      isA<CatalogState>().having(
+        (s) => s.effect,
+        'effect',
+        const OpenMovieDetail(edge),
+      ),
+    ],
   );
 
   blocTest<CatalogCubit, CatalogState>(
     'filme < 6.0 mostra aviso e não abre o detalhe',
     build: build,
     act: (c) => c.onMovieSelected(bad),
-    expect: () => [isA<CatalogState>().having((s) => s.effect, 'effect', const ShowLowRatingWarning(bad))],
+    expect: () => [
+      isA<CatalogState>().having(
+        (s) => s.effect,
+        'effect',
+        const ShowLowRatingWarning(bad),
+      ),
+    ],
   );
 }

@@ -37,7 +37,10 @@ class DSMovieCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: DSRadius.md,
-            border: Border.all(color: highlighted ? DSColors.highlight : Colors.transparent, width: 2),
+            border: Border.all(
+              color: highlighted ? DSColors.highlight : Colors.transparent,
+              width: 2,
+            ),
           ),
           child: Stack(
             children: [

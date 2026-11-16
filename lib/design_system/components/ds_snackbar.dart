@@ -17,7 +17,12 @@ abstract final class DSSnackbar {
             children: [
               const Icon(Icons.warning_amber_rounded, color: Colors.white),
               const SizedBox(width: 12),
-              Expanded(child: Text(message, style: DSTypography.body.copyWith(color: Colors.white))),
+              Expanded(
+                child: Text(
+                  message,
+                  style: DSTypography.body.copyWith(color: Colors.white),
+                ),
+              ),
             ],
           ),
         ),
