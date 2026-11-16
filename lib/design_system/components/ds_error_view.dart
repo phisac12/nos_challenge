@@ -19,11 +19,13 @@ class DSErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.cloud_off_rounded, color: DSColors.textSecondary),
+            Icon(Icons.cloud_off_rounded, color: context.palette.textSecondary),
             const SizedBox(height: DSSpacing.sm),
             Text(
               message,
-              style: DSTypography.caption,
+              style: DSTypography.caption.copyWith(
+                color: context.palette.textSecondary,
+              ),
               textAlign: TextAlign.center,
             ),
             if (onRetry != null) ...[

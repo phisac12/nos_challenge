@@ -19,8 +19,8 @@ class DSSkeletonBlock extends StatelessWidget {
     return Container(
       width: width,
       height: height,
-      decoration: const BoxDecoration(
-        color: DSColors.surface,
+      decoration: BoxDecoration(
+        color: context.palette.surface,
         borderRadius: DSRadius.sm,
       ),
     );

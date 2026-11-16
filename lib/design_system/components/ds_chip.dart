@@ -15,21 +15,18 @@ class DSChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: const BoxDecoration(
-        color: DSColors.surfaceHigh,
+      decoration: BoxDecoration(
+        color: context.palette.surfaceHigh,
         borderRadius: DSRadius.pill,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 14, color: DSColors.textSecondary),
+            Icon(icon, size: 14, color: context.palette.textSecondary),
             const SizedBox(width: 4),
           ],
-          Text(
-            label,
-            style: DSTypography.caption.copyWith(color: DSColors.textPrimary),
-          ),
+          Text(label, style: DSTypography.caption),
         ],
       ),
     );

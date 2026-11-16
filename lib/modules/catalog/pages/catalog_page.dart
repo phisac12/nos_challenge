@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/di/injector.dart';
 import '../../../design_system/design_system.dart';
 import '../../movie_detail/pages/movie_detail_page.dart';
+import '../../settings/cubit/settings_cubit.dart';
+import '../../settings/pages/settings_drawer.dart';
 import '../cubit/catalog_cubit.dart';
 
 class CatalogPage extends StatelessWidget {
@@ -43,6 +45,8 @@ class _CatalogView extends StatelessWidget {
         cubit.effectHandled();
       },
       child: DSScreen(
+        title: context.select((SettingsCubit c) => c.state.appName),
+        drawer: const SettingsDrawer(),
         body: BlocBuilder<CatalogCubit, CatalogState>(
           buildWhen: (prev, curr) => prev.sections != curr.sections,
           builder: (context, state) {

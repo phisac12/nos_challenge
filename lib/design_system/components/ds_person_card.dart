@@ -22,7 +22,7 @@ class DSPersonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fallback = const Icon(Icons.person, color: DSColors.textSecondary);
+    final fallback = Icon(Icons.person, color: context.palette.textSecondary);
     return SizedBox(
       width: width,
       child: Column(
@@ -31,7 +31,7 @@ class DSPersonCard extends StatelessWidget {
             child: Container(
               width: width,
               height: width,
-              color: DSColors.surfaceHigh,
+              color: context.palette.surfaceHigh,
               child: imageUrl == null
                   ? fallback
                   : CachedNetworkImage(
@@ -44,14 +44,17 @@ class DSPersonCard extends StatelessWidget {
           const SizedBox(height: DSSpacing.sm),
           Text(
             name,
-            style: DSTypography.caption.copyWith(color: DSColors.textPrimary),
+            style: DSTypography.caption,
             maxLines: 2,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
           ),
           Text(
             subtitle,
-            style: DSTypography.caption.copyWith(fontSize: 11),
+            style: DSTypography.caption.copyWith(
+              fontSize: 11,
+              color: context.palette.textSecondary,
+            ),
             maxLines: 1,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,

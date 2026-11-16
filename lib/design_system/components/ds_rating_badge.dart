@@ -18,8 +18,10 @@ class DSRatingBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = highlighted ? DSColors.highlight : DSColors.surfaceHigh;
-    final fg = highlighted ? DSColors.onHighlight : DSColors.textSecondary;
+    final bg = highlighted ? DSColors.highlight : context.palette.surfaceHigh;
+    final fg = highlighted
+        ? DSColors.onHighlight
+        : context.palette.textSecondary;
     final scale = large ? 1.6 : 1.0;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8 * scale, vertical: 4 * scale),

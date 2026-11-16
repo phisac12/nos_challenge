@@ -25,7 +25,9 @@ class DSButton extends StatelessWidget {
     final isPrimary = variant == DSButtonVariant.primary;
     final style = TextButton.styleFrom(
       backgroundColor: isPrimary ? DSColors.highlight : Colors.transparent,
-      foregroundColor: isPrimary ? DSColors.onHighlight : DSColors.textPrimary,
+      foregroundColor: isPrimary
+          ? DSColors.onHighlight
+          : context.palette.textPrimary,
       shape: const RoundedRectangleBorder(borderRadius: DSRadius.pill),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       textStyle: DSTypography.badge.copyWith(fontSize: 14),

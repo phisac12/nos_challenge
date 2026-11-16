@@ -66,10 +66,13 @@ Fluxo: `Page → Cubit → UseCase → Repository → DataSource → ApiClient`.
 
 - **Flavors em Dart** — `dev`, `qa` e `prod` são entrypoints que passam um `FlavorConfig` ao `bootstrap`. Cada ambiente tem o seu `env/<flavor>.json`. Funciona igual em Android, iOS e web sem configuração nativa; *productFlavors*/schemes nativos (ícone e bundle id por ambiente) seriam o passo seguinte.
 
+- **Menu e tema** — barra superior com o nome da app e um drawer com a versão (`package_info_plus`) e o tema Sistema/Claro/Escuro. A escolha é guardada em `shared_preferences` e lida antes do `runApp`, para a app abrir já no tema certo; por omissão segue o tema do telemóvel. O domínio usa o seu próprio `AppThemeMode` (não depende do Flutter) e as cores do DS vêm de uma `ThemeExtension` (`DSPalette`) com variantes light e dark.
+
 ## Testes
 
 - `CatalogCubit`: secções independentes, regra de destaque (incluindo o limite 6.0), abrir detalhe vs. aviso.
 - `MovieDetailCubit`: carregamento, erro, retry e formatação de duração/ano.
 - `MovieModel` / `MovieDetailsModel`: parsing, URLs de imagem e normalização de campos vazios.
 - `MovieRepositoryImpl`: conversão para entidades e de exceções em `Failure`.
+- `SettingsCubit` / `SettingsRepositoryImpl`: tema inicial guardado, mudança persistida, valor inválido → sistema, versão formatada.
 - `NetworkException` / `ApiClient`: mapeamento de erros, `api_key` anexada por interceptor (adapter falso, sem rede) e falha antecipada sem key.

@@ -22,9 +22,9 @@ class DSPoster extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fallback = Container(
-      color: DSColors.surfaceHigh,
+      color: context.palette.surfaceHigh,
       alignment: Alignment.center,
-      child: const Icon(Icons.movie_outlined, color: DSColors.textSecondary),
+      child: Icon(Icons.movie_outlined, color: context.palette.textSecondary),
     );
     return SizedBox(
       width: width,
@@ -37,7 +37,8 @@ class DSPoster extends StatelessWidget {
               : CachedNetworkImage(
                   imageUrl: imageUrl!,
                   fit: BoxFit.cover,
-                  placeholder: (_, _) => Container(color: DSColors.surface),
+                  placeholder: (_, _) =>
+                      Container(color: context.palette.surface),
                   errorWidget: (_, _, _) => fallback,
                 ),
         ),

@@ -111,7 +111,9 @@ class _DetailsContent extends StatelessWidget {
             children: [
               Text(
                 '${details.voteCount} votos',
-                style: DSTypography.caption,
+                style: DSTypography.caption.copyWith(
+                  color: context.palette.textSecondary,
+                ),
                 textAlign: TextAlign.center,
               ),
               if (details.tagline != null) ...[
@@ -120,7 +122,7 @@ class _DetailsContent extends StatelessWidget {
                   '“${details.tagline}”',
                   style: DSTypography.body.copyWith(
                     fontStyle: FontStyle.italic,
-                    color: DSColors.textSecondary,
+                    color: context.palette.textSecondary,
                   ),
                   textAlign: TextAlign.center,
                 ),

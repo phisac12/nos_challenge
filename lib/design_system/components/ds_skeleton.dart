@@ -35,8 +35,8 @@ class _DSSkeletonRowState extends State<DSSkeletonRow>
         itemCount: 5,
         itemBuilder: (_, _) => Container(
           width: widget.itemWidth,
-          decoration: const BoxDecoration(
-            color: DSColors.surface,
+          decoration: BoxDecoration(
+            color: context.palette.surface,
             borderRadius: DSRadius.md,
           ),
         ),
