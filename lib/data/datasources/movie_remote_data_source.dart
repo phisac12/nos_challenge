@@ -22,9 +22,8 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
     );
     final results = (json['results'] as List?) ?? const [];
     return results
-        .cast<Map<String, dynamic>>()
-        .map(MovieModel.fromJson)
-        .toList(growable: false);
+        .map((item) => MovieModel.fromJson(item as Map<String, dynamic>))
+        .toList();
   }
 
   /// Um só pedido traz detalhe + elenco (`append_to_response=credits`).

@@ -15,7 +15,6 @@ final details = MovieDetails(
   title: 'X',
   overview: 'Sinopse',
   tagline: null,
-  backdropUrl: null,
   releaseDate: DateTime(2024, 5, 1),
   runtimeMinutes: 125,
   genres: const ['Ação'],
@@ -30,9 +29,9 @@ void main() {
   MovieDetailCubit build() => MovieDetailCubit(useCase, movie: movie);
 
   test('começa com o filme do catálogo e detalhe em loading', () {
-    final s = build().state;
-    expect(s.movie, movie);
-    expect(s.status, isA<DetailsLoading>());
+    final state = build().state;
+    expect(state.movie, movie);
+    expect(state.status, isA<DetailsLoading>());
   });
 
   blocTest<MovieDetailCubit, MovieDetailState>(
@@ -41,7 +40,7 @@ void main() {
         when(() => useCase(movieId: 7))
             .thenAnswer((_) async => Success(details)),
     build: build,
-    act: (c) => c.load(),
+    act: (cubit) => cubit.load(),
     expect: () => [
       MovieDetailState(movie: movie, status: DetailsLoaded(details)),
     ],
@@ -54,7 +53,7 @@ void main() {
         when(() => useCase(movieId: 7))
             .thenAnswer((_) async => const Failure('erro')),
     build: build,
-    act: (c) => c.load(),
+    act: (cubit) => cubit.load(),
     expect: () => [
       const MovieDetailState(movie: movie, status: DetailsError('erro')),
     ],
@@ -68,7 +67,7 @@ void main() {
     build: build,
     seed: () =>
         const MovieDetailState(movie: movie, status: DetailsError('erro')),
-    act: (c) => c.load(),
+    act: (cubit) => cubit.retry(),
     expect: () => [
       const MovieDetailState(movie: movie),
       MovieDetailState(movie: movie, status: DetailsLoaded(details)),

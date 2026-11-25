@@ -15,9 +15,9 @@ for f in dev qa prod; do cp env/example.json env/$f.json; done
 2. Executa o flavor pretendido:
 
 ```bash
-flutter run -t lib/main_dev.dart  --dart-define-from-file=env/dev.json
-flutter run -t lib/main_qa.dart   --dart-define-from-file=env/qa.json
-flutter run -t lib/main_prod.dart --dart-define-from-file=env/prod.json --release
+flutter run -t lib/flavors/main_dev.dart  --dart-define-from-file=env/dev.json
+flutter run -t lib/flavors/main_qa.dart   --dart-define-from-file=env/qa.json
+flutter run -t lib/flavors/main_prod.dart --dart-define-from-file=env/prod.json --release
 ```
 
 No VS Code, as configurações **DEV**, **QA** e **PROD** já estão em `.vscode/launch.json`.
@@ -39,7 +39,7 @@ flutter test
 ```
 lib/
 ├── core/            # DI (get_it), FlavorConfig, Env (--dart-define), Result<T>
-├── main_{dev,qa,prod}.dart  # entrypoints → bootstrap(FlavorConfig)
+├── flavors/main_{dev,qa,prod}.dart  # entrypoints → bootstrap(FlavorConfig)
 ├── network/         # ApiClient (Dio), interceptor da api_key, endpoints, NetworkException
 ├── domain/          # Entidades, contratos de repositório, use cases (1 por serviço)
 ├── data/            # DTOs (fromJson → entidade), datasources remotos, repositórios

@@ -31,7 +31,7 @@ class _MovieDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final movie = context.select((MovieDetailCubit c) => c.state.movie);
+    final movie = context.select((MovieDetailCubit cubit) => cubit.state.movie);
     return DSScreen(
       showBack: true,
       body: SingleChildScrollView(
@@ -63,14 +63,15 @@ class _MovieDetailView extends StatelessWidget {
                 ),
                 // Informação extra de /movie/{id}.
                 BlocBuilder<MovieDetailCubit, MovieDetailState>(
-                  buildWhen: (p, c) => p.status != c.status,
+                  buildWhen: (previous, current) =>
+                      previous.status != current.status,
                   builder: (context, state) => switch (state.status) {
                     DetailsLoading() => const _DetailsSkeleton(),
                     DetailsError(:final message) => Padding(
                       padding: const EdgeInsets.only(top: DSSpacing.lg),
                       child: DSErrorView(
                         message: message,
-                        onRetry: context.read<MovieDetailCubit>().load,
+                        onRetry: context.read<MovieDetailCubit>().retry,
                       ),
                     ),
                     DetailsLoaded(:final details) => _DetailsContent(
@@ -137,7 +138,7 @@ class _DetailsContent extends StatelessWidget {
                     DSChip(label: year, icon: Icons.calendar_today_rounded),
                   if (runtime != null)
                     DSChip(label: runtime, icon: Icons.schedule_rounded),
-                  for (final g in details.genres) DSChip(label: g),
+                  for (final genre in details.genres) DSChip(label: genre),
                 ],
               ),
               if (details.overview.isNotEmpty) ...[
@@ -158,12 +159,12 @@ class _DetailsContent extends StatelessWidget {
             height: 150,
             child: DSHorizontalList(
               itemCount: details.cast.length,
-              itemBuilder: (_, i) {
-                final c = details.cast[i];
+              itemBuilder: (_, index) {
+                final actor = details.cast[index];
                 return DSPersonCard(
-                  name: c.name,
-                  subtitle: c.character,
-                  imageUrl: c.profileUrl,
+                  name: actor.name,
+                  subtitle: actor.character,
+                  imageUrl: actor.profileUrl,
                 );
               },
             ),

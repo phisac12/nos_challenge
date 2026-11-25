@@ -5,32 +5,34 @@ import 'interceptors/api_key_interceptor.dart';
 import 'interceptors/logging_interceptor.dart';
 import 'network_exception.dart';
 
-/// Único ponto de contacto com HTTP. Encapsula o Dio para que o resto da app
-/// não dependa da biblioteca (trocar por `http` mexe só aqui).
+/// Único sítio que conhece o Dio. O resto da app só chama [get].
 class ApiClient {
-  ApiClient({required String apiKey, bool enableLogs = false, Dio? dio})
-    : _hasApiKey = apiKey.isNotEmpty,
-      _dio =
-          dio ??
-          Dio(
-            BaseOptions(
-              baseUrl: ApiConfig.baseUrl,
-              connectTimeout: ApiConfig.timeout,
-              receiveTimeout: ApiConfig.timeout,
-            ),
-          ) {
+  ApiClient({required this.apiKey, bool enableLogs = false, Dio? dio})
+    : _dio = dio ?? _createDio() {
     _dio.interceptors.add(ApiKeyInterceptor(apiKey));
-    if (enableLogs) _dio.interceptors.add(LoggingInterceptor());
+    if (enableLogs) {
+      _dio.interceptors.add(LoggingInterceptor());
+    }
   }
 
+  final String apiKey;
   final Dio _dio;
-  final bool _hasApiKey;
+
+  static Dio _createDio() {
+    return Dio(
+      BaseOptions(
+        baseUrl: ApiConfig.baseUrl,
+        connectTimeout: ApiConfig.timeout,
+        receiveTimeout: ApiConfig.timeout,
+      ),
+    );
+  }
 
   Future<Map<String, dynamic>> get(
     String path, {
     Map<String, dynamic>? query,
   }) async {
-    if (!_hasApiKey) {
+    if (apiKey.isEmpty) {
       throw const NetworkException(
         'API key não configurada. Executa com --dart-define-from-file=env/<flavor>.json',
       );
@@ -40,7 +42,7 @@ class ApiClient {
         path,
         queryParameters: query,
       );
-      return response.data ?? const {};
+      return response.data ?? {};
     } on DioException catch (e) {
       throw NetworkException.fromDio(e);
     }

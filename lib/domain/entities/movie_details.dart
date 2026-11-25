@@ -7,7 +7,6 @@ class MovieDetails {
     required this.title,
     required this.overview,
     required this.tagline,
-    required this.backdropUrl,
     required this.releaseDate,
     required this.runtimeMinutes,
     required this.genres,
@@ -19,7 +18,6 @@ class MovieDetails {
   final String title;
   final String overview;
   final String? tagline;
-  final String? backdropUrl;
   final DateTime? releaseDate;
   final int? runtimeMinutes;
   final List<String> genres;

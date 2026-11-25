@@ -19,7 +19,8 @@ class NosChallengeApp extends StatelessWidget {
     return BlocProvider(
       create: (_) => getIt<SettingsCubit>()..loadAppInfo(),
       child: BlocBuilder<SettingsCubit, SettingsState>(
-        buildWhen: (p, c) => p.themeMode != c.themeMode,
+        buildWhen: (previous, current) =>
+            previous.themeMode != current.themeMode,
         builder: (context, settings) => MaterialApp(
           title: config.appName,
           debugShowCheckedModeBanner: false,

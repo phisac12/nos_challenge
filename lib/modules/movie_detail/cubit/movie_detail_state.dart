@@ -24,8 +24,8 @@ final class DetailsError extends DetailsStatus {
   List<Object?> get props => [message];
 }
 
-/// O [movie] (poster + nota) existe desde o início — vem do catálogo —,
-/// por isso o ecrã nunca fica vazio; só os [status] extra carregam.
+/// [movie] vem do catálogo e mostra logo o poster e a nota.
+/// [status] é só a informação extra que vem da API.
 class MovieDetailState extends Equatable {
   const MovieDetailState({
     required this.movie,

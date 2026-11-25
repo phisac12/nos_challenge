@@ -13,7 +13,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
   /// Valor desconhecido ou ausente → segue o sistema.
   @override
   AppThemeMode getThemeMode() => AppThemeMode.values.firstWhere(
-    (m) => m.name == _local.readThemeMode(),
+    (mode) => mode.name == _local.readThemeMode(),
     orElse: () => AppThemeMode.system,
   );
 

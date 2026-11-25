@@ -15,28 +15,32 @@ DioException _dio(DioExceptionType type, {int? status}) {
 
 void main() {
   test('timeout', () {
-    final e = NetworkException.fromDio(_dio(DioExceptionType.receiveTimeout));
-    expect(e.message, contains('demorou'));
+    final exception = NetworkException.fromDio(
+      _dio(DioExceptionType.receiveTimeout),
+    );
+    expect(exception.message, contains('demorou'));
   });
 
   test('sem ligação', () {
-    final e = NetworkException.fromDio(_dio(DioExceptionType.connectionError));
-    expect(e.message, 'Sem ligação à internet.');
+    final exception = NetworkException.fromDio(
+      _dio(DioExceptionType.connectionError),
+    );
+    expect(exception.message, 'Sem ligação à internet.');
   });
 
   test('401 → API key inválida', () {
-    final e = NetworkException.fromDio(
+    final exception = NetworkException.fromDio(
       _dio(DioExceptionType.badResponse, status: 401),
     );
-    expect(e.statusCode, 401);
-    expect(e.message, 'API key inválida.');
+    expect(exception.statusCode, 401);
+    expect(exception.message, 'API key inválida.');
   });
 
   test('outro status → erro do servidor com o código', () {
-    final e = NetworkException.fromDio(
+    final exception = NetworkException.fromDio(
       _dio(DioExceptionType.badResponse, status: 500),
     );
-    expect(e.statusCode, 500);
-    expect(e.message, 'Erro do servidor (500).');
+    expect(exception.statusCode, 500);
+    expect(exception.message, 'Erro do servidor (500).');
   });
 }

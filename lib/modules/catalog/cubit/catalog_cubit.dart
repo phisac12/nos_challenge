@@ -1,31 +1,26 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/result.dart';
 import '../../../domain/entities/movie.dart';
 import '../../../domain/usecases/get_discover_movies_use_case.dart';
 
 part 'catalog_state.dart';
 
-/// Concentra as regras de negócio do catálogo:
-/// - quais páginas formam as secções;
-/// - carregamento independente de cada secção;
-/// - limiar de classificação (destaque e acesso ao detalhe).
+/// Regras de negócio do catálogo:
+/// - as secções são as páginas 1, 2 e 3;
+/// - cada secção carrega sozinha;
+/// - nota >= 6.0 destaca o filme e abre o detalhe.
 class CatalogCubit extends Cubit<CatalogState> {
-  CatalogCubit(this._getDiscoverMovies, {this.pages = defaultPages})
-    : super(CatalogState.initial(pages));
+  CatalogCubit(this._getDiscoverMovies) : super(CatalogState.initial(pages));
 
-  static const defaultPages = [1, 2, 3];
+  static const pages = [1, 2, 3];
   static const minRating = 6.0;
 
-  /// Injetado pelo construtor e privado: só o cubit o usa.
   final GetDiscoverMoviesUseCase _getDiscoverMovies;
-  final List<int> pages;
 
   static bool isWellRated(Movie movie) => movie.voteAverage >= minRating;
 
-  /// Dispara as secções em paralelo, sem `await` conjunto:
-  /// cada uma emite assim que a sua resposta chega.
+  /// Pede as 3 páginas ao mesmo tempo, sem esperar umas pelas outras.
   void loadSections() {
     for (final page in pages) {
       loadSection(page);
@@ -33,32 +28,38 @@ class CatalogCubit extends Cubit<CatalogState> {
   }
 
   Future<void> loadSection(int page) async {
-    _emitSection(page, const SectionLoading());
-    final result = await _getDiscoverMovies(page: page);
-    _emitSection(page, switch (result) {
-      Success(:final data) => SectionLoaded(
-        data
-            .map((m) => MovieItem(movie: m, isHighlighted: isWellRated(m)))
-            .toList(growable: false),
-      ),
-      Failure(:final message) => SectionError(message),
-    });
-  }
+    _updateSection(page, const SectionLoading());
 
-  void onMovieSelected(Movie movie) {
-    emit(
-      state.withEffect(
-        isWellRated(movie)
-            ? OpenMovieDetail(movie)
-            : ShowLowRatingWarning(movie),
-      ),
+    final result = await _getDiscoverMovies(page: page);
+
+    result.fold(
+      (error) => _updateSection(page, SectionError(error)),
+      (success) => _updateSection(page, SectionLoaded(_toItems(success))),
     );
   }
 
-  void effectHandled() => emit(state.withEffect(null));
+  void onMovieSelected(Movie movie) {
+    final effect = isWellRated(movie)
+        ? OpenMovieDetail(movie)
+        : ShowLowRatingWarning(movie);
+    emit(state.copyWith(effect: effect));
+  }
 
-  void _emitSection(int page, SectionState section) {
+  /// Chamado pela página depois de navegar ou mostrar o aviso.
+  void effectHandled() => emit(state.clearEffect());
+
+  /// Aplica a regra de destaque a cada filme.
+  List<MovieItem> _toItems(List<Movie> movies) {
+    return movies
+        .map(
+          (movie) => MovieItem(movie: movie, isHighlighted: isWellRated(movie)),
+        )
+        .toList();
+  }
+
+  void _updateSection(int page, SectionState section) {
     if (isClosed) return;
-    emit(state.copyWithSection(page, section));
+    final sections = {...state.sections, page: section};
+    emit(state.copyWith(sections: sections));
   }
 }

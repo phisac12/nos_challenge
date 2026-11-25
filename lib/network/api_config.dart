@@ -4,7 +4,6 @@ abstract final class ApiConfig {
   static const timeout = Duration(seconds: 15);
 
   static String? posterUrl(String? path) => _image('w500', path);
-  static String? backdropUrl(String? path) => _image('w780', path);
   static String? profileUrl(String? path) => _image('w185', path);
 
   static String? _image(String size, String? path) =>

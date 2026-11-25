@@ -27,7 +27,7 @@ void main() {
 
   test('cada secção aparece assim que a sua página responde, sem esperar pelas outras', () async {
     final completers = {
-      for (final p in [1, 2, 3]) p: Completer<Result<List<Movie>>>(),
+      for (final page in [1, 2, 3]) page: Completer<Result<List<Movie>>>(),
     };
     when(() => useCase(page: any(named: 'page')))
         .thenAnswer((inv) => completers[inv.namedArguments[#page]]!.future);
@@ -52,20 +52,20 @@ void main() {
         when(() => useCase(page: 1))
             .thenAnswer((_) async => const Success([good, edge, bad])),
     build: build,
-    act: (c) => c.loadSection(1),
+    act: (cubit) => cubit.loadSection(1),
     verify: (c) {
       final items = (c.state.sections[1] as SectionLoaded).items;
-      expect(items.map((i) => i.isHighlighted), [true, true, false]);
+      expect(items.map((item) => item.isHighlighted), [true, true, false]);
     },
   );
 
   blocTest<CatalogCubit, CatalogState>(
     'filme >= 6.0 abre o detalhe',
     build: build,
-    act: (c) => c.onMovieSelected(edge),
+    act: (cubit) => cubit.onMovieSelected(edge),
     expect: () => [
       isA<CatalogState>().having(
-        (s) => s.effect,
+        (state) => state.effect,
         'effect',
         const OpenMovieDetail(edge),
       ),
@@ -75,10 +75,10 @@ void main() {
   blocTest<CatalogCubit, CatalogState>(
     'filme < 6.0 mostra aviso e não abre o detalhe',
     build: build,
-    act: (c) => c.onMovieSelected(bad),
+    act: (cubit) => cubit.onMovieSelected(bad),
     expect: () => [
       isA<CatalogState>().having(
-        (s) => s.effect,
+        (state) => state.effect,
         'effect',
         const ShowLowRatingWarning(bad),
       ),

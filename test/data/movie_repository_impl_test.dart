@@ -62,7 +62,6 @@ void main() {
           title: 'D',
           overview: '',
           tagline: null,
-          backdropPath: null,
           releaseDate: '2020-01-01',
           runtime: 90,
           genres: ['Drama'],

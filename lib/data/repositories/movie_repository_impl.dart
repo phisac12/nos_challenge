@@ -5,38 +5,34 @@ import '../../domain/repositories/movie_repository.dart';
 import '../../network/network_exception.dart';
 import '../datasources/movie_remote_data_source.dart';
 
+/// Busca os dados, converte models em entidades e erros em [Failure].
 class MovieRepositoryImpl implements MovieRepository {
   const MovieRepositoryImpl(this._remote);
 
   final MovieRemoteDataSource _remote;
 
   @override
-  Future<Result<List<Movie>>> getDiscoverMovies({required int page}) => _guard(
-    () async =>
-        (await _remote.discoverMovies(page: page))
-            .map((m) => m.toEntity())
-            .toList(growable: false),
-    fallback: 'Não foi possível carregar os filmes.',
-  );
-
-  @override
-  Future<Result<MovieDetails>> getMovieDetails({required int movieId}) =>
-      _guard(
-        () async => (await _remote.movieDetails(movieId: movieId)).toEntity(),
-        fallback: 'Não foi possível carregar o detalhe do filme.',
-      );
-
-  /// Converte exceções em [Failure] num só sítio.
-  Future<Result<T>> _guard<T>(
-    Future<T> Function() action, {
-    required String fallback,
-  }) async {
+  Future<Result<List<Movie>>> getDiscoverMovies({required int page}) async {
     try {
-      return Success(await action());
+      final models = await _remote.discoverMovies(page: page);
+      final movies = models.map((model) => model.toEntity()).toList();
+      return Success(movies);
     } on NetworkException catch (e) {
       return Failure(e.message);
     } catch (_) {
-      return Failure(fallback);
+      return const Failure('Não foi possível carregar os filmes.');
+    }
+  }
+
+  @override
+  Future<Result<MovieDetails>> getMovieDetails({required int movieId}) async {
+    try {
+      final model = await _remote.movieDetails(movieId: movieId);
+      return Success(model.toEntity());
+    } on NetworkException catch (e) {
+      return Failure(e.message);
+    } catch (_) {
+      return const Failure('Não foi possível carregar o detalhe do filme.');
     }
   }
 }

@@ -41,7 +41,7 @@ void main() {
   blocTest<SettingsCubit, SettingsState>(
     'mudar tema emite e persiste',
     build: build,
-    act: (c) => c.changeThemeMode(AppThemeMode.light),
+    act: (cubit) => cubit.changeThemeMode(AppThemeMode.light),
     expect: () => [
       const SettingsState(appName: 'App', themeMode: AppThemeMode.light),
     ],
@@ -51,7 +51,7 @@ void main() {
   blocTest<SettingsCubit, SettingsState>(
     'escolher o mesmo tema não emite nem persiste',
     build: build,
-    act: (c) => c.changeThemeMode(AppThemeMode.system),
+    act: (cubit) => cubit.changeThemeMode(AppThemeMode.system),
     expect: () => <SettingsState>[],
     verify: (_) => verifyNever(() => saveTheme(any())),
   );
@@ -62,7 +62,7 @@ void main() {
       (_) async => const AppInfo(version: '1.0.0', buildNumber: '1'),
     ),
     build: build,
-    act: (c) => c.loadAppInfo(),
+    act: (cubit) => cubit.loadAppInfo(),
     expect: () => [
       const SettingsState(
         appName: 'App',

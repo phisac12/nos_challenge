@@ -11,7 +11,7 @@ class MovieItem extends Equatable {
   List<Object?> get props => [movie, isHighlighted];
 }
 
-/// Estado individual de cada secção — é isto que permite cada uma aparecer sozinha.
+/// Estado de uma secção: cada uma tem o seu, por isso aparecem independentes.
 sealed class SectionState extends Equatable {
   const SectionState();
   @override
@@ -58,19 +58,26 @@ final class ShowLowRatingWarning extends CatalogEffect {
 class CatalogState extends Equatable {
   const CatalogState({required this.sections, this.effect});
 
+  /// Todas as secções começam em loading.
   factory CatalogState.initial(List<int> pages) => CatalogState(
-    sections: {for (final p in pages) p: const SectionLoading()},
+    sections: {for (final page in pages) page: const SectionLoading()},
   );
 
-  /// page -> estado da secção. Ordem de inserção preservada (LinkedHashMap).
+  /// Número da página → estado dessa secção.
   final Map<int, SectionState> sections;
+
+  /// Ação de uso único pendente (navegar ou avisar). Nulo quando não há.
   final CatalogEffect? effect;
 
-  CatalogState copyWithSection(int page, SectionState section) =>
-      CatalogState(sections: {...sections, page: section}, effect: effect);
+  CatalogState copyWith({
+    Map<int, SectionState>? sections,
+    CatalogEffect? effect,
+  }) => CatalogState(
+    sections: sections ?? this.sections,
+    effect: effect ?? this.effect,
+  );
 
-  CatalogState withEffect(CatalogEffect? effect) =>
-      CatalogState(sections: sections, effect: effect);
+  CatalogState clearEffect() => CatalogState(sections: sections);
 
   @override
   List<Object?> get props => [sections, effect];

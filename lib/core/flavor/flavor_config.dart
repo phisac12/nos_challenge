@@ -1,7 +1,7 @@
 enum Flavor { dev, qa, prod }
 
 /// Configuração do ambiente em execução. Definida uma vez no entrypoint
-/// (`main_dev.dart`, `main_qa.dart`, `main_prod.dart`) e injetada via get_it.
+/// (`lib/flavors/main_dev.dart`, `main_qa.dart`, `main_prod.dart`) e injetada via get_it.
 class FlavorConfig {
   const FlavorConfig._({
     required this.flavor,

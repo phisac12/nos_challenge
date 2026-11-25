@@ -1,7 +1,18 @@
-/// Resultado explícito de uma operação: sucesso ou falha.
-/// Evita exceções a atravessar camadas e obriga quem consome a tratar os dois casos.
+/// Resultado de uma operação: sucesso com dados ou falha com mensagem.
 sealed class Result<T> {
   const Result();
+
+  /// Trata os dois casos de uma vez:
+  /// `result.fold((error) => ..., (success) => ...)`.
+  R fold<R>(
+    R Function(String error) onFailure,
+    R Function(T success) onSuccess,
+  ) {
+    return switch (this) {
+      Success(:final data) => onSuccess(data),
+      Failure(:final message) => onFailure(message),
+    };
+  }
 }
 
 final class Success<T> extends Result<T> {

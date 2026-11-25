@@ -26,8 +26,8 @@ class _CatalogView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<CatalogCubit, CatalogState>(
-      listenWhen: (prev, curr) =>
-          curr.effect != null && prev.effect != curr.effect,
+      listenWhen: (previous, current) =>
+          current.effect != null && previous.effect != current.effect,
       listener: (context, state) {
         final cubit = context.read<CatalogCubit>();
         switch (state.effect) {
@@ -45,10 +45,11 @@ class _CatalogView extends StatelessWidget {
         cubit.effectHandled();
       },
       child: DSScreen(
-        title: context.select((SettingsCubit c) => c.state.appName),
+        title: context.select((SettingsCubit cubit) => cubit.state.appName),
         drawer: const SettingsDrawer(),
         body: BlocBuilder<CatalogCubit, CatalogState>(
-          buildWhen: (prev, curr) => prev.sections != curr.sections,
+          buildWhen: (previous, current) =>
+              previous.sections != current.sections,
           builder: (context, state) {
             final entries = state.sections.entries.toList();
             return ListView.builder(
@@ -97,8 +98,8 @@ class _SectionContent extends StatelessWidget {
       ),
       SectionLoaded(:final items) => DSHorizontalList(
         itemCount: items.length,
-        itemBuilder: (_, i) {
-          final item = items[i];
+        itemBuilder: (_, index) {
+          final item = items[index];
           return DSMovieCard(
             posterUrl: item.movie.posterUrl,
             rating: item.movie.voteAverage,

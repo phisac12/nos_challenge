@@ -8,13 +8,15 @@ import '../../../domain/usecases/save_theme_mode_use_case.dart';
 
 part 'settings_state.dart';
 
-/// Estado global de preferências (tema, versão). Fornecido acima do MaterialApp.
+/// Preferências globais (tema e versão). Fica acima do MaterialApp porque
+/// o tema afeta a app toda.
 class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit(
     GetThemeModeUseCase getThemeMode,
     this._saveThemeMode,
     this._getAppInfo, {
     required String appName,
+    // O tema guardado é lido logo aqui, para a app abrir já com ele.
   }) : super(SettingsState(appName: appName, themeMode: getThemeMode()));
 
   final SaveThemeModeUseCase _saveThemeMode;
@@ -26,7 +28,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(state.copyWith(appVersion: '${info.version} (${info.buildNumber})'));
   }
 
-  /// Atualiza a UI de imediato e persiste em seguida.
+  /// Muda o tema na hora e depois guarda a escolha.
   Future<void> changeThemeMode(AppThemeMode mode) async {
     if (mode == state.themeMode) return;
     emit(state.copyWith(themeMode: mode));

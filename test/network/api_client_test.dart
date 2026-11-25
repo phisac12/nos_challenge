@@ -57,7 +57,11 @@ void main() {
     expect(
       () => client(adapter).get('/x'),
       throwsA(
-        isA<NetworkException>().having((e) => e.statusCode, 'status', 401),
+        isA<NetworkException>().having(
+          (exception) => exception.statusCode,
+          'status',
+          401,
+        ),
       ),
     );
   });

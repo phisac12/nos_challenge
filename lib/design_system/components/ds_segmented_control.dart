@@ -32,12 +32,12 @@ class DSSegmentedControl<T> extends StatelessWidget {
       ),
       child: Row(
         children: [
-          for (final s in segments)
+          for (final segment in segments)
             Expanded(
               child: _SegmentButton(
-                segment: s,
-                isSelected: s.value == selected,
-                onTap: () => onChanged(s.value),
+                segment: segment,
+                isSelected: segment.value == selected,
+                onTap: () => onChanged(segment.value),
               ),
             ),
         ],
