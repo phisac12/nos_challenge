@@ -1,26 +1,29 @@
-/// Resultado de uma operação: sucesso com dados ou falha com mensagem.
-sealed class Result<T> {
+/// Resultado de uma operação: [Success] com os dados ou [Failure] com a mensagem.
+abstract class Result<T> {
   const Result();
 
-  /// Trata os dois casos de uma vez:
-  /// `result.fold((error) => ..., (success) => ...)`.
-  R fold<R>(
-    R Function(String error) onFailure,
-    R Function(T success) onSuccess,
+  /// Chama [onError] se falhou, ou [onSuccess] se deu certo.
+  void fold(
+    void Function(String error) onError,
+    void Function(T success) onSuccess,
   ) {
-    return switch (this) {
-      Success(:final data) => onSuccess(data),
-      Failure(:final message) => onFailure(message),
-    };
+    final result = this;
+    if (result is Failure<T>) {
+      onError(result.message);
+    } else if (result is Success<T>) {
+      onSuccess(result.data);
+    }
   }
 }
 
-final class Success<T> extends Result<T> {
+/// Deu certo: guarda os dados.
+class Success<T> extends Result<T> {
   const Success(this.data);
   final T data;
 }
 
-final class Failure<T> extends Result<T> {
+/// Deu errado: guarda a mensagem de erro.
+class Failure<T> extends Result<T> {
   const Failure(this.message);
   final String message;
 }
