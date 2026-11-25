@@ -21,14 +21,18 @@ class MovieDetailCubit extends Cubit<MovieDetailState> {
     if (isClosed) return;
 
     result.fold(
-      (error) => emit(state.copyWith(status: DetailsError(error))),
-      (success) => emit(state.copyWith(status: DetailsLoaded(success))),
+      (error) => emit(
+        state.copyWith(status: DetailsStatus.error, errorMessage: error),
+      ),
+      (success) =>
+          emit(state.copyWith(status: DetailsStatus.loaded, details: success)),
     );
   }
 
   /// Botão "Tentar novamente": volta a loading e carrega de novo.
   Future<void> retry() async {
-    emit(state.copyWith(status: const DetailsLoading()));
+    // Estado limpo: volta a loading sem a mensagem de erro anterior.
+    emit(MovieDetailState(movie: state.movie));
     await load();
   }
 

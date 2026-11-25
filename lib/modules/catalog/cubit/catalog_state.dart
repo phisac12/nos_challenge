@@ -11,29 +11,26 @@ class MovieItem extends Equatable {
   List<Object?> get props => [movie, isHighlighted];
 }
 
+enum SectionStatus { loading, loaded, error }
+
 /// Estado de uma secção: cada uma tem o seu, por isso aparecem independentes.
-sealed class SectionState extends Equatable {
-  const SectionState();
-  @override
-  List<Object?> get props => [];
-}
+class SectionState extends Equatable {
+  const SectionState({
+    this.status = SectionStatus.loading,
+    this.items = const [],
+    this.errorMessage,
+  });
 
-final class SectionLoading extends SectionState {
-  const SectionLoading();
-}
+  final SectionStatus status;
 
-final class SectionLoaded extends SectionState {
-  const SectionLoaded(this.items);
+  /// Filmes da secção. Só tem conteúdo quando o status é loaded.
   final List<MovieItem> items;
-  @override
-  List<Object?> get props => [items];
-}
 
-final class SectionError extends SectionState {
-  const SectionError(this.message);
-  final String message;
+  /// Mensagem de erro. Só tem valor quando o status é error.
+  final String? errorMessage;
+
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [status, items, errorMessage];
 }
 
 /// Efeitos de uso único (navegação / aviso), consumidos por um BlocListener.
@@ -60,7 +57,7 @@ class CatalogState extends Equatable {
 
   /// Todas as secções começam em loading.
   factory CatalogState.initial(List<int> pages) => CatalogState(
-    sections: {for (final page in pages) page: const SectionLoading()},
+    sections: {for (final page in pages) page: const SectionState()},
   );
 
   /// Número da página → estado dessa secção.

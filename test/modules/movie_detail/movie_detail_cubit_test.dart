@@ -31,7 +31,7 @@ void main() {
   test('começa com o filme do catálogo e detalhe em loading', () {
     final state = build().state;
     expect(state.movie, movie);
-    expect(state.status, isA<DetailsLoading>());
+    expect(state.status, DetailsStatus.loading);
   });
 
   blocTest<MovieDetailCubit, MovieDetailState>(
@@ -42,7 +42,11 @@ void main() {
     build: build,
     act: (cubit) => cubit.load(),
     expect: () => [
-      MovieDetailState(movie: movie, status: DetailsLoaded(details)),
+      MovieDetailState(
+        movie: movie,
+        status: DetailsStatus.loaded,
+        details: details,
+      ),
     ],
     verify: (_) => verify(() => useCase(movieId: 7)).called(1),
   );
@@ -55,7 +59,11 @@ void main() {
     build: build,
     act: (cubit) => cubit.load(),
     expect: () => [
-      const MovieDetailState(movie: movie, status: DetailsError('erro')),
+      const MovieDetailState(
+        movie: movie,
+        status: DetailsStatus.error,
+        errorMessage: 'erro',
+      ),
     ],
   );
 
@@ -65,12 +73,19 @@ void main() {
         when(() => useCase(movieId: 7))
             .thenAnswer((_) async => Success(details)),
     build: build,
-    seed: () =>
-        const MovieDetailState(movie: movie, status: DetailsError('erro')),
+    seed: () => const MovieDetailState(
+      movie: movie,
+      status: DetailsStatus.error,
+      errorMessage: 'erro',
+    ),
     act: (cubit) => cubit.retry(),
     expect: () => [
       const MovieDetailState(movie: movie),
-      MovieDetailState(movie: movie, status: DetailsLoaded(details)),
+      MovieDetailState(
+        movie: movie,
+        status: DetailsStatus.loaded,
+        details: details,
+      ),
     ],
   );
 

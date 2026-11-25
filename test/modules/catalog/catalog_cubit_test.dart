@@ -22,7 +22,10 @@ void main() {
   CatalogCubit build() => CatalogCubit(useCase);
 
   test('estado inicial: todas as secções em loading', () {
-    expect(build().state.sections.values, everyElement(isA<SectionLoading>()));
+    expect(
+      build().state.sections.values.map((section) => section.status),
+      everyElement(SectionStatus.loading),
+    );
   });
 
   test('cada secção aparece assim que a sua página responde, sem esperar pelas outras', () async {
@@ -37,13 +40,16 @@ void main() {
     completers[2]!.complete(const Success([good]));
     await Future<void>.delayed(Duration.zero);
 
-    expect(cubit.state.sections[1], isA<SectionLoading>());
-    expect(cubit.state.sections[2], isA<SectionLoaded>());
-    expect(cubit.state.sections[3], isA<SectionLoading>());
+    expect(cubit.state.sections[1]!.status, SectionStatus.loading);
+    expect(cubit.state.sections[2]!.status, SectionStatus.loaded);
+    expect(cubit.state.sections[3]!.status, SectionStatus.loading);
 
     completers[3]!.complete(const Failure('erro'));
     await Future<void>.delayed(Duration.zero);
-    expect(cubit.state.sections[3], const SectionError('erro'));
+    expect(
+      cubit.state.sections[3],
+      const SectionState(status: SectionStatus.error, errorMessage: 'erro'),
+    );
   });
 
   blocTest<CatalogCubit, CatalogState>(
@@ -54,7 +60,7 @@ void main() {
     build: build,
     act: (cubit) => cubit.loadSection(1),
     verify: (c) {
-      final items = (c.state.sections[1] as SectionLoaded).items;
+      final items = c.state.sections[1]!.items;
       expect(items.map((item) => item.isHighlighted), [true, true, false]);
     },
   );

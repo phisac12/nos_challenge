@@ -65,18 +65,21 @@ class _MovieDetailView extends StatelessWidget {
                 BlocBuilder<MovieDetailCubit, MovieDetailState>(
                   buildWhen: (previous, current) =>
                       previous.status != current.status,
-                  builder: (context, state) => switch (state.status) {
-                    DetailsLoading() => const _DetailsSkeleton(),
-                    DetailsError(:final message) => Padding(
-                      padding: const EdgeInsets.only(top: DSSpacing.lg),
-                      child: DSErrorView(
-                        message: message,
-                        onRetry: context.read<MovieDetailCubit>().retry,
-                      ),
-                    ),
-                    DetailsLoaded(:final details) => _DetailsContent(
-                      details: details,
-                    ),
+                  builder: (context, state) {
+                    switch (state.status) {
+                      case DetailsStatus.loading:
+                        return const _DetailsSkeleton();
+                      case DetailsStatus.error:
+                        return Padding(
+                          padding: const EdgeInsets.only(top: DSSpacing.lg),
+                          child: DSErrorView(
+                            message: state.errorMessage ?? '',
+                            onRetry: context.read<MovieDetailCubit>().retry,
+                          ),
+                        );
+                      case DetailsStatus.loaded:
+                        return _DetailsContent(details: state.details!);
+                    }
                   },
                 ),
               ],

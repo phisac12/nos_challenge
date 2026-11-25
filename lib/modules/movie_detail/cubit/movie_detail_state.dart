@@ -1,43 +1,39 @@
 part of 'movie_detail_cubit.dart';
 
-sealed class DetailsStatus extends Equatable {
-  const DetailsStatus();
-  @override
-  List<Object?> get props => [];
-}
-
-final class DetailsLoading extends DetailsStatus {
-  const DetailsLoading();
-}
-
-final class DetailsLoaded extends DetailsStatus {
-  const DetailsLoaded(this.details);
-  final MovieDetails details;
-  @override
-  List<Object?> get props => [details];
-}
-
-final class DetailsError extends DetailsStatus {
-  const DetailsError(this.message);
-  final String message;
-  @override
-  List<Object?> get props => [message];
-}
+enum DetailsStatus { loading, loaded, error }
 
 /// [movie] vem do catálogo e mostra logo o poster e a nota.
-/// [status] é só a informação extra que vem da API.
+/// [status], [details] e [errorMessage] são a informação extra que vem da API.
 class MovieDetailState extends Equatable {
   const MovieDetailState({
     required this.movie,
-    this.status = const DetailsLoading(),
+    this.status = DetailsStatus.loading,
+    this.details,
+    this.errorMessage,
   });
 
   final Movie movie;
   final DetailsStatus status;
 
-  MovieDetailState copyWith({DetailsStatus? status}) =>
-      MovieDetailState(movie: movie, status: status ?? this.status);
+  /// Só tem valor quando o status é loaded.
+  final MovieDetails? details;
+
+  /// Só tem valor quando o status é error.
+  final String? errorMessage;
+
+  MovieDetailState copyWith({
+    DetailsStatus? status,
+    MovieDetails? details,
+    String? errorMessage,
+  }) {
+    return MovieDetailState(
+      movie: movie,
+      status: status ?? this.status,
+      details: details ?? this.details,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
 
   @override
-  List<Object?> get props => [movie, status];
+  List<Object?> get props => [movie, status, details, errorMessage];
 }

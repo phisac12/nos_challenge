@@ -90,25 +90,28 @@ class _SectionContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<CatalogCubit>();
-    return switch (section) {
-      SectionLoading() => const DSSkeletonRow(),
-      SectionError(:final message) => DSErrorView(
-        message: message,
-        onRetry: () => cubit.loadSection(page),
-      ),
-      SectionLoaded(:final items) => DSHorizontalList(
-        itemCount: items.length,
-        itemBuilder: (_, index) {
-          final item = items[index];
-          return DSMovieCard(
-            posterUrl: item.movie.posterUrl,
-            rating: item.movie.voteAverage,
-            highlighted: item.isHighlighted,
-            heroTag: MovieDetailPage.heroTag(item.movie),
-            onTap: () => cubit.onMovieSelected(item.movie),
-          );
-        },
-      ),
-    };
+    switch (section.status) {
+      case SectionStatus.loading:
+        return const DSSkeletonRow();
+      case SectionStatus.error:
+        return DSErrorView(
+          message: section.errorMessage ?? '',
+          onRetry: () => cubit.loadSection(page),
+        );
+      case SectionStatus.loaded:
+        return DSHorizontalList(
+          itemCount: section.items.length,
+          itemBuilder: (_, index) {
+            final item = section.items[index];
+            return DSMovieCard(
+              posterUrl: item.movie.posterUrl,
+              rating: item.movie.voteAverage,
+              highlighted: item.isHighlighted,
+              heroTag: MovieDetailPage.heroTag(item.movie),
+              onTap: () => cubit.onMovieSelected(item.movie),
+            );
+          },
+        );
+    }
   }
 }

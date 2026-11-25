@@ -28,13 +28,19 @@ class CatalogCubit extends Cubit<CatalogState> {
   }
 
   Future<void> loadSection(int page) async {
-    _updateSection(page, const SectionLoading());
+    _updateSection(page, const SectionState());
 
     final result = await _getDiscoverMovies(page: page);
 
     result.fold(
-      (error) => _updateSection(page, SectionError(error)),
-      (success) => _updateSection(page, SectionLoaded(_toItems(success))),
+      (error) => _updateSection(
+        page,
+        SectionState(status: SectionStatus.error, errorMessage: error),
+      ),
+      (success) => _updateSection(
+        page,
+        SectionState(status: SectionStatus.loaded, items: _toItems(success)),
+      ),
     );
   }
 
